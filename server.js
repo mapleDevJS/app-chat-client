@@ -1,32 +1,42 @@
-var express = require('express')
-var bodyParser = require('body-parser')
-var app = express()
-var http = require('http').Server(app)
-var io = require('socket.io')(http)
+const express = require('express');
+const bodyParser = require('body-parser');
+const http = require('http');
+const socketIO = require('socket.io');
 
-app.use(express.static(__dirname))
-app.use(bodyParser.json())
-app.use(bodyParser.urlencoded({extended: false}))
+const app = express();
+const server = http.Server(app);
+const io = socketIO(server);
 
-var messages = [
-    {name: 'Tim', message: 'Hi'},
-    {name: 'Jane', message: 'Hello'}
-]
+const PORT = 3000;
 
-app.get('/messages', (req, res) =>{
-    res.send(messages)
-})
+const messages = [
+    { name: 'Tim', message: 'Hi' },
+    { name: 'Jane', message: 'Hello' }
+];
 
-app.post('/messages', (req, res) =>{
-    messages.push(req.body)
-    io.emit('message', req.body)
-    res.sendStatus(200)
-})
+app.use(express.static(__dirname));
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 
-io.on('connection', (socket) => {
-    console.log('a user connected')
-})
+app.get('/messages', getMessages);
+app.post('/messages', postMessage);
 
-var server = http.listen(3000, () => {
-    console.log('server is listening on port', server.address().port)
-})
+io.on('connection', onConnection);
+
+server.listen(PORT, () => {
+    console.log('Server is listening on port', server.address().port);
+});
+
+function getMessages(req, res) {
+    res.send(messages);
+}
+
+function postMessage(req, res) {
+    messages.push(req.body);
+    io.emit('message', req.body);
+    res.sendStatus(200);
+}
+
+function onConnection(socket) {
+    console.log('A user connected');
+}
