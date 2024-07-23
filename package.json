@@ -1,6 +1,6 @@
 {
     "name": "app-chat",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "A real-time chat application using Node.js, Express, and Socket.io",
     "author": "Your Name",
     "license": "ISC",
@@ -9,10 +9,15 @@
         "start": "node server.js",
         "test": "echo \"Error: no test specified\" && exit 1"
     },
-    "keywords": ["chat", "socket.io", "express", "real-time"],
+    "keywords": [
+        "chat",
+        "socket.io",
+        "express",
+        "real-time"
+    ],
     "dependencies": {
         "body-parser": "^1.20.2",
         "express": "^4.17.1",
-        "socket.io": "^2.4.1"
+        "socket.io": "^4.7.5"
     }
 }
